@@ -63,6 +63,11 @@ class APIClient {
     return response.data
   }
 
+  async listAllClaims() {
+    const response = await this.client.get('/claims')
+    return response.data
+  }
+
   async listClaims(workerId: number) {
     const response = await this.client.get(`/claims/worker/${workerId}`)
     return response.data

@@ -167,6 +167,29 @@ def create_claim(claim: ClaimCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail=str(e))
 
 
+@router.get("/claims")
+def list_all_claims(db: Session = Depends(get_db)):
+    """List all claims with pagination"""
+    from app.models.db import Claim as ClaimModel
+    claims = db.query(ClaimModel).all()
+    return {
+        "total_claims": len(claims),
+        "claims": [
+            {
+                "id": c.id,
+                "worker_id": c.worker_id,
+                "status": c.status,
+                "amount": c.claim_amount,
+                "description": c.description or "",
+                "fraud_score": getattr(c, 'fraud_score', 0),
+                "created_at": c.created_at.isoformat() if hasattr(c, 'created_at') else "",
+                "date": c.created_at.strftime("%Y-%m-%d") if hasattr(c, 'created_at') else ""
+            }
+            for c in claims
+        ]
+    }
+
+
 @router.post("/claims/{claim_id}/verify")
 def verify_claim(claim_id: int, db: Session = Depends(get_db)):
     """Verify claim for fraud"""

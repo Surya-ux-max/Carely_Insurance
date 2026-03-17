@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FaCheckCircle, FaClock, FaTimesCircle, FaFileAlt, FaDownload, FaSearch } from 'react-icons/fa'
+import { apiClient } from '../api/client'
 
 interface Claim {
   id: number
@@ -14,46 +15,78 @@ interface Claim {
 const ClaimsPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState<string>('ALL')
+  const [claims, setClaims] = useState<Claim[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  // Mock data
-  const mockClaims: Claim[] = [
-    {
-      id: 1,
-      worker_id: 'W001',
-      amount: 500,
-      status: 'PAID',
-      date: '2024-03-15',
-      description: 'Heavy rainfall disruption',
-      fraud_score: 0.08,
-    },
-    {
-      id: 2,
-      worker_id: 'W002',
-      amount: 300,
-      status: 'APPROVED',
-      date: '2024-03-14',
-      description: 'Extreme temperature event',
-      fraud_score: 0.12,
-    },
-    {
-      id: 3,
-      worker_id: 'W003',
-      amount: 400,
-      status: 'VERIFIED',
-      date: '2024-03-13',
-      description: 'Air quality degradation',
-      fraud_score: 0.15,
-    },
-    {
-      id: 4,
-      worker_id: 'W004',
-      amount: 250,
-      status: 'PENDING',
-      date: '2024-03-12',
-      description: 'Platform outage',
-      fraud_score: 0.45,
-    },
-  ]
+  useEffect(() => {
+    loadClaims()
+  }, [])
+
+  const loadClaims = async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const response = await apiClient.listAllClaims()
+      const claimsData = response.claims || []
+      // Transform backend data to match Claim interface
+      const transformedClaims: Claim[] = claimsData.map((c: any) => ({
+        id: c.id,
+        worker_id: c.worker_id.toString(),
+        amount: c.amount,
+        status: c.status,
+        date: c.date,
+        description: c.description || '',
+        fraud_score: c.fraud_score || 0,
+      }))
+      setClaims(transformedClaims)
+    } catch (err) {
+      console.error('Failed to load claims:', err)
+      setError('Failed to load claims from backend')
+      // Fallback to mock data
+      const mockClaims: Claim[] = [
+        {
+          id: 1,
+          worker_id: 'W001',
+          amount: 500,
+          status: 'PAID',
+          date: '2024-03-15',
+          description: 'Heavy rainfall disruption',
+          fraud_score: 0.08,
+        },
+        {
+          id: 2,
+          worker_id: 'W002',
+          amount: 300,
+          status: 'APPROVED',
+          date: '2024-03-14',
+          description: 'Extreme temperature event',
+          fraud_score: 0.12,
+        },
+        {
+          id: 3,
+          worker_id: 'W003',
+          amount: 400,
+          status: 'VERIFIED',
+          date: '2024-03-13',
+          description: 'Air quality degradation',
+          fraud_score: 0.15,
+        },
+        {
+          id: 4,
+          worker_id: 'W004',
+          amount: 250,
+          status: 'PENDING',
+          date: '2024-03-12',
+          description: 'Flooding event',
+          fraud_score: 0.22,
+        },
+      ]
+      setClaims(mockClaims)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -85,7 +118,7 @@ const ClaimsPage: React.FC = () => {
     }
   }
 
-  const filteredClaims = mockClaims.filter((claim) => {
+  const filteredClaims = claims.filter((claim) => {
     const matchesSearch =
       claim.worker_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
       claim.id.toString().includes(searchTerm)
@@ -96,25 +129,25 @@ const ClaimsPage: React.FC = () => {
   const statsData = [
     {
       title: 'Total Claims',
-      value: mockClaims.length,
+      value: claims.length,
       icon: FaFileAlt,
       color: 'blue',
     },
     {
       title: 'Paid',
-      value: mockClaims.filter((c) => c.status === 'PAID').length,
+      value: claims.filter((c) => c.status === 'PAID').length,
       icon: FaCheckCircle,
       color: 'green',
     },
     {
       title: 'Pending',
-      value: mockClaims.filter((c) => c.status === 'PENDING').length,
+      value: claims.filter((c) => c.status === 'PENDING').length,
       icon: FaClock,
       color: 'yellow',
     },
     {
       title: 'Rejected',
-      value: mockClaims.filter((c) => c.status === 'REJECTED').length,
+      value: claims.filter((c) => c.status === 'REJECTED').length,
       icon: FaTimesCircle,
       color: 'red',
     },
@@ -131,8 +164,29 @@ const ClaimsPage: React.FC = () => {
           <p className="text-lg text-gray-600 font-medium">Manage and track all insurance claims</p>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8 animate-fade-in">
+        {/* Loading State */}
+        {loading && (
+          <div className="flex items-center justify-center min-h-96">
+            <div className="text-center">
+              <div className="inline-block animate-spin mb-4">
+                <div className="h-12 w-12 border-4 border-blue-600 border-t-transparent rounded-full"></div>
+              </div>
+              <p className="text-gray-600 font-semibold">Loading claims...</p>
+            </div>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <p className="text-yellow-800">⚠️ {error} - Showing mock data</p>
+          </div>
+        )}
+
+        {!loading && (
+          <>
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8 animate-fade-in">
           {statsData.map((stat, i) => {
             const Icon = stat.icon
             return (
@@ -269,6 +323,8 @@ const ClaimsPage: React.FC = () => {
             </table>
           </div>
         </div>
+          </>
+        )}
       </div>
     </div>
   )
