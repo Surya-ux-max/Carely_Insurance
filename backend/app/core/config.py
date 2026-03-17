@@ -2,6 +2,7 @@
 Application configuration settings
 """
 from pydantic_settings import BaseSettings
+from pydantic import ConfigDict
 from typing import Optional
 
 
@@ -14,7 +15,7 @@ class Settings(BaseSettings):
     version: str = "0.1.0"
     
     # Database
-    database_url: str = "postgresql://gigshield:gigshield@localhost:5432/gigshield_db"
+    database_url: str = "sqlite:///./gigshield.db"
     
     # Redis
     redis_url: str = "redis://localhost:6379/0"
@@ -35,9 +36,11 @@ class Settings(BaseSettings):
     weather_check_interval_minutes: int = 60
     delivery_data_check_interval_minutes: int = 30
     
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
+    model_config = ConfigDict(
+        env_file=".env",
+        case_sensitive=False,
+        extra="ignore"
+    )
 
 
 settings = Settings()

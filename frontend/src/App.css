@@ -1,0 +1,703 @@
+/* ================================
+   App Container & Layout
+   ================================ */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem 1rem;
+}
+
+.container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* ================================
+   Header & Title Styles
+   ================================ */
+.page-header {
+  @apply mb-8 slide-up;
+}
+
+.page-title {
+  @apply text-4xl sm:text-5xl font-bold text-gray-900 mb-2;
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.page-subtitle {
+  @apply text-lg text-gray-600 font-medium;
+}
+
+.section-title {
+  @apply text-2xl font-bold text-gray-800 mb-6;
+}
+
+/* ================================
+   Grid Layout Utilities
+   ================================ */
+.grid-auto {
+  @apply grid gap-6;
+}
+
+.grid-1 {
+  @apply grid grid-cols-1 gap-6;
+}
+
+.grid-2 {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+}
+
+.grid-3 {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+}
+
+.grid-4 {
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4;
+}
+
+.grid-5 {
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4;
+}
+
+/* ================================
+   Stat Card Styles
+   ================================ */
+.stat-card {
+  @apply bg-white rounded-xl shadow-md p-6 transition-all duration-300;
+  border-top: 4px solid transparent;
+}
+
+.stat-card:hover {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  transform: translateY(-8px);
+}
+
+.stat-card.primary {
+  border-top-color: #2563eb;
+}
+
+.stat-card.success {
+  border-top-color: #10b981;
+}
+
+.stat-card.warning {
+  border-top-color: #f59e0b;
+}
+
+.stat-card.danger {
+  border-top-color: #ef4444;
+}
+
+.stat-card-icon {
+  @apply w-14 h-14 rounded-full flex items-center justify-center text-2xl mb-3;
+}
+
+.stat-card-icon.blue {
+  @apply bg-blue-100 text-blue-600;
+}
+
+.stat-card-icon.green {
+  @apply bg-green-100 text-green-600;
+}
+
+.stat-card-icon.orange {
+  @apply bg-orange-100 text-orange-600;
+}
+
+.stat-card-icon.red {
+  @apply bg-red-100 text-red-600;
+}
+
+.stat-card-icon.cyan {
+  @apply bg-cyan-100 text-cyan-600;
+}
+
+.stat-card-icon.purple {
+  @apply bg-purple-100 text-purple-600;
+}
+
+.stat-value {
+  @apply text-3xl font-bold text-gray-900;
+}
+
+.stat-label {
+  @apply text-gray-600 text-sm font-medium;
+}
+
+.stat-change {
+  @apply text-sm font-semibold mt-2;
+}
+
+.stat-change.positive {
+  @apply text-green-600;
+}
+
+.stat-change.negative {
+  @apply text-red-600;
+}
+
+/* ================================
+   Table Styles
+   ================================ */
+.table-container {
+  @apply bg-white rounded-xl shadow-md overflow-hidden;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.table {
+  @apply w-full border-collapse;
+}
+
+.table thead {
+  background: linear-gradient(90deg, #2563eb 0%, #1e40af 100%);
+}
+
+.table thead th {
+  @apply px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider;
+}
+
+.table tbody tr {
+  @apply border-b border-gray-200 transition-colors duration-200;
+}
+
+.table tbody tr:hover {
+  @apply bg-blue-50;
+}
+
+.table tbody td {
+  @apply px-6 py-4 text-sm text-gray-700;
+}
+
+.table tbody tr:last-child {
+  @apply border-b-0;
+}
+
+.table-striped tbody tr:nth-child(even) {
+  @apply bg-gray-50;
+}
+
+/* ================================
+   Form Styles
+   ================================ */
+.form-group {
+  @apply mb-6;
+}
+
+.form-group.inline {
+  @apply inline-block pr-4;
+}
+
+.form-label {
+  @apply block text-sm font-semibold text-gray-700 mb-2;
+}
+
+.form-label.required::after {
+  @apply text-red-600 ml-1;
+  content: '*';
+}
+
+.form-input {
+  @apply w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm transition-all;
+  background-color: #fff;
+}
+
+.form-input:focus {
+  @apply border-blue-600 ring-2 ring-blue-100 bg-white;
+}
+
+.form-input.error {
+  @apply border-red-600 ring-2 ring-red-100;
+}
+
+.form-input.success {
+  @apply border-green-600 ring-2 ring-green-100;
+}
+
+.form-input:disabled {
+  @apply bg-gray-100 cursor-not-allowed text-gray-500;
+}
+
+.form-select {
+  @apply form-input appearance-none pr-10 cursor-pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'%3E%3C/path%3E%3C/svg%3E");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+}
+
+.form-textarea {
+  @apply form-input resize-none;
+  min-height: 120px;
+}
+
+.form-feedback {
+  @apply text-xs mt-1.5;
+}
+
+.form-error {
+  @apply text-red-600 font-medium;
+}
+
+.form-help {
+  @apply text-gray-500;
+}
+
+.form-success {
+  @apply text-green-600 font-medium;
+}
+
+/* ================================
+   Search Bar
+   ================================ */
+.search-box {
+  @apply relative;
+}
+
+.search-box input {
+  @apply pl-10 pr-4;
+}
+
+.search-box-icon {
+  @apply absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400;
+}
+
+/* ================================
+   Filter & Sort
+   ================================ */
+.filter-bar {
+  @apply flex flex-wrap gap-3 items-center mb-6;
+}
+
+.filter-group {
+  @apply flex gap-2 items-center;
+}
+
+/* ================================
+   Badge & Status
+   ================================ */
+.status-badge {
+  @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold;
+}
+
+.status-pending {
+  @apply bg-yellow-100 text-yellow-800;
+}
+
+.status-approved {
+  @apply bg-green-100 text-green-800;
+}
+
+.status-rejected {
+  @apply bg-red-100 text-red-800;
+}
+
+.status-paid {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.status-verified {
+  @apply bg-green-100 text-green-800;
+}
+
+/* ================================
+   Progress Bar
+   ================================ */
+.progress {
+  @apply w-full bg-gray-200 rounded-full h-2 overflow-hidden;
+}
+
+.progress-bar {
+  @apply h-full rounded-full transition-all duration-300;
+}
+
+.progress-bar.primary {
+  @apply bg-blue-600;
+}
+
+.progress-bar.success {
+  @apply bg-green-600;
+}
+
+.progress-bar.warning {
+  @apply bg-yellow-600;
+}
+
+.progress-bar.danger {
+  @apply bg-red-600;
+}
+
+/* ================================
+   Alert Styles (Enhanced)
+   ================================ */
+.alert {
+  @apply p-4 rounded-lg mb-4 flex items-start gap-3 border-l-4 fade-in;
+}
+
+.alert-icon {
+  @apply flex-shrink-0 w-5 h-5 mt-0.5;
+}
+
+.alert-content {
+  @apply flex-1;
+}
+
+.alert-close {
+  @apply flex-shrink-0 cursor-pointer hover:opacity-70 transition-opacity;
+}
+
+.alert-title {
+  @apply font-semibold mb-1;
+}
+
+.alert-message {
+  @apply text-sm;
+}
+
+.alert-success {
+  @apply bg-green-50 text-green-800 border-green-500;
+}
+
+.alert-danger {
+  @apply bg-red-50 text-red-800 border-red-500;
+}
+
+.alert-warning {
+  @apply bg-yellow-50 text-yellow-800 border-yellow-500;
+}
+
+.alert-info {
+  @apply bg-blue-50 text-blue-800 border-blue-500;
+}
+
+/* ================================
+   Loading & Skeleton
+   ================================ */
+.spinner {
+  @apply inline-block;
+  animation: spin 1s linear infinite;
+}
+
+.spinner-sm {
+  @apply w-4 h-4;
+}
+
+.spinner-md {
+  @apply w-6 h-6;
+}
+
+.spinner-lg {
+  @apply w-8 h-8;
+}
+
+.skeleton {
+  @apply bg-gray-300 rounded animate-pulse;
+}
+
+.skeleton-text {
+  @apply skeleton h-4 mb-2;
+}
+
+.skeleton-box {
+  @apply skeleton h-32;
+}
+
+/* ================================
+   Card Grid Item
+   ================================ */
+.card-grid {
+  @apply grid gap-6;
+}
+
+.card-item {
+  @apply bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg;
+}
+
+.card-item-image {
+  @apply w-full h-48 object-cover;
+}
+
+.card-item-body {
+  @apply p-6;
+}
+
+.card-item-footer {
+  @apply px-6 py-4 bg-gray-50 border-t border-gray-200;
+}
+
+/* ================================
+   Pagination
+   ================================ */
+.pagination {
+  @apply flex items-center justify-center gap-2 mt-8;
+}
+
+.pagination-item {
+  @apply px-3 py-2 rounded-lg border border-gray-300 text-sm font-medium transition-all hover:bg-gray-50;
+}
+
+.pagination-item.active {
+  @apply bg-blue-600 text-white border-blue-600;
+}
+
+.pagination-item:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+/* ================================
+   Responsive Utilities
+   ================================ */
+.hidden-mobile {
+  @apply hidden md:block;
+}
+
+.hidden-desktop {
+  @apply md:hidden;
+}
+
+/* ================================
+   Text Utilities
+   ================================ */
+.text-center { @apply text-center; }
+.text-left { @apply text-left; }
+.text-right { @apply text-right; }
+
+.text-primary { @apply text-blue-600; }
+.text-secondary { @apply text-green-600; }
+.text-success { @apply text-green-600; }
+.text-danger { @apply text-red-600; }
+.text-warning { @apply text-yellow-600; }
+.text-info { @apply text-cyan-600; }
+.text-muted { @apply text-gray-500; }
+
+.font-light { @apply font-light; }
+.font-normal { @apply font-normal; }
+.font-semibold { @apply font-semibold; }
+.font-bold { @apply font-bold; }
+
+/* ================================
+   Spacing Utilities
+   ================================ */
+.mb-0 { @apply mb-0; }
+.mb-1 { @apply mb-1; }
+.mb-2 { @apply mb-2; }
+.mb-3 { @apply mb-3; }
+.mb-4 { @apply mb-4; }
+.mb-5 { @apply mb-5; }
+.mb-6 { @apply mb-6; }
+.mb-8 { @apply mb-8; }
+
+.mt-0 { @apply mt-0; }
+.mt-1 { @apply mt-1; }
+.mt-2 { @apply mt-2; }
+.mt-3 { @apply mt-3; }
+.mt-4 { @apply mt-4; }
+.mt-6 { @apply mt-6; }
+
+.px-0 { @apply px-0; }
+.px-2 { @apply px-2; }
+.px-4 { @apply px-4; }
+.px-6 { @apply px-6; }
+.px-8 { @apply px-8; }
+
+.py-2 { @apply py-2; }
+.py-4 { @apply py-4; }
+.py-6 { @apply py-6; }
+
+.gap-2 { @apply gap-2; }
+.gap-3 { @apply gap-3; }
+.gap-4 { @apply gap-4; }
+.gap-6 { @apply gap-6; }
+
+/* ================================
+   Display & Flex
+   ================================ */
+.flex-center {
+  @apply flex items-center justify-center;
+}
+
+.flex-between {
+  @apply flex items-center justify-between;
+}
+
+.flex-end {
+  @apply flex items-center justify-end;
+}
+
+.flex-col-center {
+  @apply flex flex-col items-center justify-center;
+}
+
+/* ================================
+   Box Shadow Utilities
+   ================================ */
+.shadow-none { box-shadow: none; }
+.shadow-sm { box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); }
+.shadow-md { box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+.shadow-lg { box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); }
+.shadow-xl { box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15); }
+
+/* ================================
+   Border Radius
+   ================================ */
+.rounded-none { @apply rounded-none; }
+.rounded-sm { @apply rounded-sm; }
+.rounded { @apply rounded; }
+.rounded-lg { @apply rounded-lg; }
+.rounded-xl { @apply rounded-xl; }
+.rounded-full { @apply rounded-full; }
+
+/* ================================
+   Transition & Animation
+   ================================ */
+.transition-all { @apply transition-all duration-300 ease-in-out; }
+.transition-colors { @apply transition-colors duration-200; }
+.transition-opacity { @apply transition-opacity duration-200; }
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+/* ================================
+   Navbar Enhancement
+   ================================ */
+.navbar {
+  @apply bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg sticky top-0 z-50;
+}
+
+.navbar-brand {
+  @apply text-2xl font-bold flex items-center gap-2 hover:opacity-80 transition;
+}
+
+.navbar-nav {
+  @apply flex gap-6 items-center;
+}
+
+.navbar-item {
+  @apply text-sm font-medium hover:text-blue-100 transition relative;
+}
+
+.navbar-item.active {
+  border-bottom: 2px solid white;
+  padding-bottom: 4px;
+}
+
+/* ================================
+   Footer Enhancement
+   ================================ */
+.footer {
+  @apply bg-gray-900 text-gray-300 mt-auto;
+}
+
+.footer-section {
+  @apply mb-4;
+}
+
+.footer-title {
+  @apply text-white font-bold text-sm mb-3;
+}
+
+.footer-link {
+  @apply text-gray-400 text-sm hover:text-white transition mb-2 block;
+}
+
+.footer-divider {
+  @apply border-t border-gray-800 my-6 py-6;
+}
+
+/* ================================
+   Card Enhancement
+   ================================ */
+.card-elevated {
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+}
+
+.card-flat {
+  box-shadow: none;
+  @apply border border-gray-200;
+}
+
+.card-seamless {
+  @apply rounded-none shadow-none;
+}
+
+/* ================================
+   Responsive Hidden/Show
+   ================================ */
+@media (max-width: 640px) {
+  .hidden-sm { @apply hidden; }
+  .show-sm { @apply block; }
+}
+
+@media (max-width: 768px) {
+  .hidden-md { @apply hidden; }
+  .show-md { @apply block; }
+}
+
+@media (max-width: 1024px) {
+  .hidden-lg { @apply hidden; }
+  .show-lg { @apply block; }
+}
+
+/* ================================
+   Accessibility
+   ================================ */
+.sr-only {
+  @apply absolute w-px h-px p-0 -m-px overflow-hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.focus-ring:focus {
+  @apply outline-none ring-2 ring-offset-2 ring-blue-600;
+}
+
+.form-success {
+  @apply text-green-600 text-sm mt-1;
+}
+
+/* Alert Styles */
+.alert {
+  @apply p-4 rounded-lg mb-4;
+}
+
+.alert-info {
+  @apply bg-blue-50 border-l-4 border-blue-600 text-blue-800;
+}
+
+.alert-success {
+  @apply bg-green-50 border-l-4 border-green-600 text-green-800;
+}
+
+.alert-warning {
+  @apply bg-yellow-50 border-l-4 border-yellow-600 text-yellow-800;
+}
+
+.alert-danger {
+  @apply bg-red-50 border-l-4 border-red-600 text-red-800;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 fade-in;
+}
+
+.modal-content {
+  @apply bg-white rounded-lg shadow-xl p-8 max-w-md w-full mx-4 slide-in;
+}
