@@ -5,7 +5,7 @@ import {
   FaChartLine, FaClock, FaArrowRight, FaExclamationTriangle,
   FaWifi, FaCloudRain, FaThermometerHalf, FaMotorcycle
 } from 'react-icons/fa'
-import { useAuth, useData, loadWorkerData } from '../stores'
+import { useData, loadWorkerData } from '../stores'
 import { apiClient } from '../api/client'
 import type { InsurancePlan, Subscription } from '../types'
 
@@ -38,48 +38,31 @@ const StatusBadge = ({ status }: { status: string }) => {
   )
 }
 
+const MOCK_USER = { id: 1, name: 'Suryaprakash S', platform: 'Swiggy', zone: 'Chennai Central' }
+
 const WorkerPortal: React.FC = () => {
-  const { user } = useAuth()
+  const user = MOCK_USER
   const { claims, loading } = useData()
   const [activeTab, setActiveTab]       = useState('overview')
   const [subscription, setSubscription] = useState<Subscription | null>(null)
   const [subscribing, setSubscribing]   = useState<number | null>(null)
 
   useEffect(() => {
-    if (user?.id) { loadWorkerData(user.id); fetchSub() }
-  }, [user])
+    loadWorkerData(user.id)
+    fetchSub()
+  }, [])
 
   const fetchSub = async () => {
-    if (!user?.id) return
     try { setSubscription(await apiClient.getSubscription(user.id)) } catch {}
   }
 
   const handleSubscribe = async (planId: number) => {
-    if (!user?.id) return
     setSubscribing(planId)
     try {
       await apiClient.createSubscription(user.id, planId)
       await fetchSub()
     } catch (e) { alert('Failed: ' + (e as Error).message) }
     finally { setSubscribing(null) }
-  }
-
-  /* ── Not logged in ── */
-  if (!user) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-12 text-center max-w-sm w-full">
-          <div className="w-20 h-20 bg-red-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-red-200">
-            <FaShieldAlt className="text-white text-3xl" />
-          </div>
-          <h1 className="text-2xl font-black text-gray-900 mb-2 tracking-tight">Worker Portal</h1>
-          <p className="text-gray-400 mb-8 text-sm leading-relaxed">Log in to access your coverage, claims and payouts.</p>
-          <button className="btn-primary w-full py-3.5 rounded-2xl text-base">
-            Login to Continue <FaArrowRight />
-          </button>
-        </div>
-      </div>
-    )
   }
 
   const daysLeft = subscription

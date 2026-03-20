@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { FaHeartbeat, FaBars, FaTimes } from 'react-icons/fa'
-import { useAuth } from '../stores'
 
 const Navbar: React.FC = () => {
-  const { user, logout } = useAuth()
   const location = useLocation()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -50,34 +48,13 @@ const Navbar: React.FC = () => {
             ))}
           </div>
 
-          {/* User Section */}
-          <div className="flex items-center gap-3">
-            {user ? (
-              <div className="hidden sm:flex items-center gap-3">
-                <div className="px-3 py-1.5 bg-red-50 rounded-lg border border-red-100">
-                  <span className="text-sm font-semibold text-red-700">{user.name}</span>
-                </div>
-                <button
-                  onClick={() => logout()}
-                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-semibold transition-all duration-200 shadow-sm"
-                >
-                  Logout
-                </button>
-              </div>
-            ) : (
-              <button className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-semibold transition-all duration-200 shadow-sm">
-                Login
-              </button>
-            )}
-
-            {/* Mobile Toggle */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-red-50 hover:text-red-600 transition-all"
-            >
-              {mobileMenuOpen ? <FaTimes size={18} /> : <FaBars size={18} />}
-            </button>
-          </div>
+          {/* Mobile Toggle */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-red-50 hover:text-red-600 transition-all"
+          >
+            {mobileMenuOpen ? <FaTimes size={18} /> : <FaBars size={18} />}
+          </button>
         </div>
 
         {/* Mobile Menu */}
@@ -97,14 +74,7 @@ const Navbar: React.FC = () => {
                 {link.label}
               </Link>
             ))}
-            {user && (
-              <button
-                onClick={() => { logout(); setMobileMenuOpen(false) }}
-                className="w-full text-left px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-semibold transition-all"
-              >
-                Logout
-              </button>
-            )}
+
           </div>
         )}
       </div>
