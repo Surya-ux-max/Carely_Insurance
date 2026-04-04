@@ -63,11 +63,9 @@ export const loadWorkerData = async (workerId: number) => {
   const store = useData.getState()
   store.setLoading(true)
   try {
-    const worker = await apiClient.getWorker(workerId)
-    const subscription = await apiClient.getSubscription(workerId)
-    const claims = await apiClient.listClaims(workerId)
-    
-    useAuth.getState().setUser(worker)
+    const claimsData = await apiClient.listClaims(workerId)
+    // backend now returns array directly
+    const claims = Array.isArray(claimsData) ? claimsData : (claimsData.claims || [])
     store.setClaims(claims)
     store.setError(null)
   } catch (error: any) {
@@ -81,34 +79,20 @@ export const loadDashboardStats = async () => {
   const store = useData.getState()
   store.setLoading(true)
   try {
-    // Fetch real data from backend
-    const claimsResponse = await apiClient.listAllClaims()
-    const claims = claimsResponse.claims || []
-    
-    // Calculate stats from real data
-    const stats: DashboardStats = {
-      total_workers: 150, // Would need a dedicated endpoint for this
-      active_subscriptions: 120,
-      total_claims: claims.length,
-      total_payouts: 40,
-      pending_claims: claims.filter((c: any) => c.status === 'PENDING').length,
-      fraud_detected: 3,
-      average_payout_time: 2.5,
-    }
+    const stats: DashboardStats = await apiClient.getStats()
     store.setStats(stats)
     store.setError(null)
   } catch (error: any) {
     // Fallback to mock data if API fails
-    const stats: DashboardStats = {
-      total_workers: 150,
-      active_subscriptions: 120,
-      total_claims: 45,
-      total_payouts: 40,
-      pending_claims: 5,
-      fraud_detected: 3,
+    store.setStats({
+      total_workers: 0,
+      active_subscriptions: 0,
+      total_claims: 0,
+      total_payouts: 0,
+      pending_claims: 0,
+      fraud_detected: 0,
       average_payout_time: 2.5,
-    }
-    store.setStats(stats)
+    })
     store.setError(null)
   } finally {
     store.setLoading(false)

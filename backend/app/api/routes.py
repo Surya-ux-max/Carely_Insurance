@@ -30,6 +30,13 @@ def create_worker(worker: WorkerCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail=str(e))
 
 
+@router.get("/workers")
+def list_workers(db: Session = Depends(get_db)):
+    """List all workers"""
+    workers = WorkerService.list_workers(db)
+    return {"total_workers": len(workers), "workers": workers}
+
+
 @router.get("/workers/{worker_id}", response_model=WorkerResponse)
 def get_worker(worker_id: int, db: Session = Depends(get_db)):
     """Get worker details"""
@@ -169,7 +176,7 @@ def create_claim(claim: ClaimCreate, db: Session = Depends(get_db)):
 
 @router.get("/claims")
 def list_all_claims(db: Session = Depends(get_db)):
-    """List all claims with pagination"""
+    """List all claims"""
     from app.models.db import Claim as ClaimModel
     claims = db.query(ClaimModel).all()
     return {
@@ -178,12 +185,12 @@ def list_all_claims(db: Session = Depends(get_db)):
             {
                 "id": c.id,
                 "worker_id": c.worker_id,
-                "status": c.status,
+                "status": c.status.value if hasattr(c.status, 'value') else c.status,
                 "amount": c.claim_amount,
-                "description": c.description or "",
-                "fraud_score": getattr(c, 'fraud_score', 0),
-                "created_at": c.created_at.isoformat() if hasattr(c, 'created_at') else "",
-                "date": c.created_at.strftime("%Y-%m-%d") if hasattr(c, 'created_at') else ""
+                "description": c.verification_notes or "",
+                "fraud_score": c.fraud_score or 0.0,
+                "created_at": c.created_at.isoformat(),
+                "date": c.created_at.strftime("%Y-%m-%d")
             }
             for c in claims
         ]
@@ -221,19 +228,23 @@ def get_claim(claim_id: int, db: Session = Depends(get_db)):
 def list_claims(worker_id: int, db: Session = Depends(get_db)):
     """List claims for worker"""
     claims = ClaimService.list_claims(db, worker_id)
-    return {
-        "worker_id": worker_id,
-        "total_claims": len(claims),
-        "claims": [
-            {
-                "id": c.id,
-                "status": c.status,
-                "amount": c.claim_amount,
-                "created_at": c.created_at.isoformat()
-            }
-            for c in claims
-        ]
-    }
+    return [
+        {
+            "id": c.id,
+            "worker_id": c.worker_id,
+            "subscription_id": c.subscription_id,
+            "status": c.status.value if hasattr(c.status, 'value') else c.status,
+            "claim_amount": c.claim_amount,
+            "estimated_income_loss": c.estimated_income_loss or c.claim_amount,
+            "fraud_score": c.fraud_score or 0.0,
+            "fraud_checks": c.fraud_checks or {},
+            "verified_by": c.verified_by or "",
+            "verification_notes": c.verification_notes or "",
+            "created_at": c.created_at.isoformat(),
+            "updated_at": c.updated_at.isoformat() if c.updated_at else c.created_at.isoformat()
+        }
+        for c in claims
+    ]
 
 
 @router.post("/claims/{claim_id}/approve")
@@ -263,7 +274,7 @@ def initiate_payout(payout: PayoutCreate, db: Session = Depends(get_db)):
 
 
 @router.post("/payouts/{payout_id}/complete")
-def complete_payout(payout_id: int, razorpay_transfer_id: str, db: Session = Depends(get_db)):
+def complete_payout(payout_id: int, db: Session = Depends(get_db), razorpay_transfer_id: str = "mock_transfer_id"):
     """Mark payout as completed"""
     try:
         payout = PayoutService.complete_payout(db, payout_id, razorpay_transfer_id)
@@ -284,6 +295,36 @@ def get_payout(payout_id: int, db: Session = Depends(get_db)):
     if not payout:
         raise HTTPException(status_code=404, detail="Payout not found")
     return payout
+
+
+# ==================== Stats Endpoint ====================
+
+@router.get("/stats")
+def get_stats(db: Session = Depends(get_db)):
+    """Get dashboard statistics"""
+    from app.models.db import Worker as WorkerModel, Subscription as SubModel, Claim as ClaimModel, Payout as PayoutModel, ClaimStatus
+    from sqlalchemy import func
+    total_workers = db.query(func.count(WorkerModel.id)).scalar() or 0
+    active_subs = db.query(func.count(SubModel.id)).filter(
+        SubModel.status == "ACTIVE"
+    ).scalar() or 0
+    total_claims = db.query(func.count(ClaimModel.id)).scalar() or 0
+    total_payouts = db.query(func.count(PayoutModel.id)).scalar() or 0
+    pending_claims = db.query(func.count(ClaimModel.id)).filter(
+        ClaimModel.status == ClaimStatus.PENDING
+    ).scalar() or 0
+    fraud_detected = db.query(func.count(ClaimModel.id)).filter(
+        ClaimModel.status == ClaimStatus.REJECTED
+    ).scalar() or 0
+    return {
+        "total_workers": total_workers,
+        "active_subscriptions": active_subs,
+        "total_claims": total_claims,
+        "total_payouts": total_payouts,
+        "pending_claims": pending_claims,
+        "fraud_detected": fraud_detected,
+        "average_payout_time": 2.5
+    }
 
 
 # ==================== Health/Status Endpoints ====================

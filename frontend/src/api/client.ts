@@ -99,8 +99,8 @@ class APIClient {
   }
 
   async completePayout(id: number, razorpayTransferId: string) {
-    const response = await this.client.post(`/payouts/${id}/complete`, {
-      razorpay_transfer_id: razorpayTransferId,
+    const response = await this.client.post(`/payouts/${id}/complete`, null, {
+      params: { razorpay_transfer_id: razorpayTransferId },
     })
     return response.data
   }
@@ -108,6 +108,12 @@ class APIClient {
   // Risk Assessment
   async assessRisk(data: Record<string, any>) {
     const response = await this.client.post('/risk/assess', data)
+    return response.data
+  }
+
+  // Stats
+  async getStats() {
+    const response = await this.client.get('/stats')
     return response.data
   }
 

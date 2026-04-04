@@ -189,7 +189,7 @@ class ClaimCreate(ClaimBase):
 class ClaimResponse(BaseModel):
     id: int
     worker_id: int
-    status: ClaimStatusSchema
+    status: str
     claim_amount: float
     fraud_score: float
     created_at: datetime
@@ -197,12 +197,13 @@ class ClaimResponse(BaseModel):
 
     class Config:
         from_attributes = True
+        use_enum_values = True
 
 
 class ClaimDetailResponse(ClaimResponse):
-    estimated_income_loss: float
-    verification_notes: Optional[str]
-    fraud_checks: dict
+    estimated_income_loss: Optional[float] = None
+    verification_notes: Optional[str] = None
+    fraud_checks: Optional[dict] = None
 
 
 # ==================== Payout Schemas ====================

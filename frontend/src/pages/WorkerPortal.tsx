@@ -61,6 +61,7 @@ const WorkerPortal: React.FC = () => {
     try {
       await apiClient.createSubscription(user.id, planId)
       await fetchSub()
+      await loadWorkerData(user.id)
     } catch (e) { alert('Failed: ' + (e as Error).message) }
     finally { setSubscribing(null) }
   }
