@@ -17,6 +17,16 @@ Sri Eshwar College of Engineering
 - Tamilselvan P
   
 ---
+
+## 📸 Screenshots
+
+<img src="./frontend/src/images/carely1.jpeg" width="100%" alt="Carely Screenshot 1" />
+
+<img src="./frontend/src/images/carely2.png" width="100%" alt="Carely Screenshot 2" />
+
+<img src="./frontend/src/images/carely3.png" width="100%" alt="Carely Screenshot 3" />
+
+---
 ## 📋 Table of Contents
 - [Overview](#-overview)
 - [Problem](#-problem)
