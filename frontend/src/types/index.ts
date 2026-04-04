@@ -1,3 +1,5 @@
+export type Role = 'worker' | 'admin'
+
 export interface Worker {
   id?: number
   user_id: string

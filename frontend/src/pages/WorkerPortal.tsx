@@ -5,7 +5,7 @@ import {
   FaChartLine, FaClock, FaArrowRight, FaExclamationTriangle,
   FaWifi, FaCloudRain, FaThermometerHalf, FaMotorcycle
 } from 'react-icons/fa'
-import { useData, loadWorkerData } from '../stores'
+import { useData, useAuth, loadWorkerData } from '../stores'
 import { apiClient } from '../api/client'
 import type { InsurancePlan, Subscription } from '../types'
 
@@ -41,7 +41,8 @@ const StatusBadge = ({ status }: { status: string }) => {
 const MOCK_USER = { id: 1, name: 'Suryaprakash S', platform: 'Swiggy', zone: 'Chennai Central' }
 
 const WorkerPortal: React.FC = () => {
-  const user = MOCK_USER
+  const { user: authUser } = useAuth()
+  const user = authUser?.id ? { id: authUser.id, name: authUser.name, platform: authUser.platform, zone: authUser.zone } : MOCK_USER
   const { claims, loading } = useData()
   const [activeTab, setActiveTab]       = useState('overview')
   const [subscription, setSubscription] = useState<Subscription | null>(null)

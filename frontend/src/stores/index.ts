@@ -1,11 +1,12 @@
 import create from 'zustand'
-import type { Worker, Subscription, Claim, Payout, DashboardStats } from '../types'
+import type { Worker, Subscription, Claim, Payout, DashboardStats, Role } from '../types'
 import { apiClient } from '../api/client'
 
 interface AuthStore {
   user: Worker | null
+  role: Role | null
   isAuthenticated: boolean
-  setUser: (user: Worker | null) => void
+  setUser: (user: Worker | null, role?: Role) => void
   logout: () => void
 }
 
@@ -27,18 +28,22 @@ interface DataStore {
 
 export const useAuth = create<AuthStore>((set) => ({
   user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!) : null,
+  role: localStorage.getItem('role') as Role | null,
   isAuthenticated: !!localStorage.getItem('user'),
-  setUser: (user) => {
-    set({ user, isAuthenticated: !!user })
+  setUser: (user, role) => {
+    set({ user, role: role ?? null, isAuthenticated: !!user })
     if (user) {
       localStorage.setItem('user', JSON.stringify(user))
+      if (role) localStorage.setItem('role', role)
     } else {
       localStorage.removeItem('user')
+      localStorage.removeItem('role')
     }
   },
   logout: () => {
-    set({ user: null, isAuthenticated: false })
+    set({ user: null, role: null, isAuthenticated: false })
     localStorage.removeItem('user')
+    localStorage.removeItem('role')
   },
 }))
 
