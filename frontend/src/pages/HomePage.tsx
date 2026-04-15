@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { FaHeartbeat, FaBolt, FaShieldAlt, FaChartLine, FaArrowRight, FaCheck, FaUsers, FaRupeeSign } from 'react-icons/fa'
 import CityScene3D from '../components/CityScene3D'
 import PhoneModel3D from '../components/PhoneModel3D'
+import { useTranslation } from 'react-i18next'
 
 
 const Loader = () => (
@@ -12,6 +13,7 @@ const Loader = () => (
 )
 
 const HomePage: React.FC = () => {
+  const { t } = useTranslation()
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
 
@@ -26,35 +28,43 @@ const HomePage: React.FC = () => {
             <div className="relative z-10 pb-16">
               <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-red-50 border border-red-100 rounded-full mb-10">
                 <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                <span className="text-red-600 text-sm font-semibold tracking-wide">Parametric Insurance · Gig Workers</span>
+                <span className="text-red-600 text-sm font-semibold tracking-wide">{t('hero_badge')}</span>
               </div>
 
               <h1 className="text-[3.6rem] md:text-[4.5rem] lg:text-[5rem] font-black text-gray-950 leading-[1.05] tracking-tight mb-7">
-                Insurance<br />
-                that <span className="text-red-600">truly</span><br />
-                <span className="text-red-600">cares.</span>
+                {t('hero_title_1')}<br />
+                {t('hero_title_2')} <span className="text-red-600">{t('hero_title_3')}</span><br />
+                <span className="text-red-600">{t('hero_title_4')}</span>
               </h1>
 
               <p className="text-lg md:text-xl text-gray-500 leading-relaxed mb-10 max-w-md font-light">
-                Instant income protection when disruptions hit — rain, traffic, platform outages. No paperwork. Just automatic support.
+                {t('hero_desc')}
               </p>
 
               <div className="flex flex-wrap gap-4 mb-12">
-                <Link to="/worker" className="btn-primary text-base px-8 py-4 rounded-2xl shadow-lg shadow-red-200">
-                  Get Protected Now <FaArrowRight />
+                <Link
+                  to="/admin"
+                  className="inline-flex items-center gap-2.5 bg-red-600 hover:bg-red-700 text-white text-base font-bold px-8 py-4 rounded-2xl shadow-lg shadow-red-200 transition-all duration-200 hover:-translate-y-0.5"
+                >
+                  <FaChartLine className="text-red-200" />
+                  {t('hero_btn_dashboard')}
+                  <FaArrowRight className="text-sm" />
                 </Link>
-                <Link to="/admin" className="btn-outline text-base px-8 py-4 rounded-2xl">
-                  View Dashboard
+                <Link
+                  to="/worker"
+                  className="inline-flex items-center gap-2.5 bg-white hover:bg-red-50 text-red-600 text-base font-bold px-8 py-4 rounded-2xl border-2 border-red-200 hover:border-red-400 transition-all duration-200 hover:-translate-y-0.5"
+                >
+                  {t('hero_btn_worker')}
                 </Link>
               </div>
 
               <div className="flex flex-wrap gap-7">
-                {['No paperwork', 'Instant payouts', 'AI-powered'].map((t, i) => (
+                {[t('hero_check_1'), t('hero_check_2'), t('hero_check_3')].map((text, i) => (
                   <div key={i} className="flex items-center gap-2 text-gray-400 text-sm font-medium">
                     <div className="w-5 h-5 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
                       <FaCheck className="text-red-600 text-[9px]" />
                     </div>
-                    {t}
+                    {text}
                   </div>
                 ))}
               </div>
@@ -64,20 +74,20 @@ const HomePage: React.FC = () => {
             <div className="relative h-[520px] lg:h-[620px]">
               <div className="absolute top-5 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2 px-3.5 py-1.5 bg-white/90 backdrop-blur border border-red-100 rounded-full shadow-sm">
                 <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
-                <span className="text-[11px] font-semibold text-red-600 tracking-wide">Live Network — Gig Workers Connected</span>
+                <span className="text-[11px] font-semibold text-red-600 tracking-wide">{t('hero_live_badge')}</span>
               </div>
               <Suspense fallback={<Loader />}>
                 <CityScene3D />
               </Suspense>
               <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-5 z-10 bg-white/80 backdrop-blur px-4 py-2 rounded-full border border-gray-100 shadow-sm">
                 <div className="flex items-center gap-1.5 text-[11px] text-gray-500 font-medium">
-                  <span className="w-2.5 h-2.5 bg-red-600 rounded-full" /> Worker Node
+                  <span className="w-2.5 h-2.5 bg-red-600 rounded-full" /> {t('hero_legend_worker')}
                 </div>
                 <div className="flex items-center gap-1.5 text-[11px] text-gray-500 font-medium">
-                  <span className="w-5 h-px bg-red-400 block" /> Insurance Link
+                  <span className="w-5 h-px bg-red-400 block" /> {t('hero_legend_link')}
                 </div>
                 <div className="flex items-center gap-1.5 text-[11px] text-gray-500 font-medium">
-                  <span className="w-2.5 h-2.5 bg-red-200 rounded-sm block" /> City Zone
+                  <span className="w-2.5 h-2.5 bg-red-200 rounded-sm block" /> {t('hero_legend_zone')}
                 </div>
               </div>
             </div>
@@ -94,9 +104,9 @@ const HomePage: React.FC = () => {
         <div className="max-w-5xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
             {[
-              { icon: FaUsers,     value: '100K+', label: 'Workers Protected' },
-              { icon: FaRupeeSign, value: '₹5Cr+', label: 'Claims Processed'  },
-              { icon: FaShieldAlt, value: '99.9%', label: 'Platform Uptime'   },
+              { icon: FaUsers,     value: '100K+', label: t('stats_workers') },
+              { icon: FaRupeeSign, value: '₹5Cr+', label: t('stats_claims')  },
+              { icon: FaShieldAlt, value: '99.9%', label: t('stats_uptime')   },
             ].map((s, i) => (
               <div key={i} className="flex flex-col items-center gap-2">
                 <s.icon className="text-red-300 text-xl mb-1" />
@@ -114,17 +124,17 @@ const HomePage: React.FC = () => {
       <section className="py-28 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-20">
-            <p className="text-red-600 text-xs font-bold uppercase tracking-[0.2em] mb-3">Why Carely</p>
-            <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">Built for gig workers,<br />by design</h2>
-            <p className="text-gray-400 mt-5 max-w-lg mx-auto text-lg font-light">Every feature is crafted to protect your income when real-world disruptions happen.</p>
+            <p className="text-red-600 text-xs font-bold uppercase tracking-[0.2em] mb-3">{t('features_eyebrow')}</p>
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">{t('features_title').split('\n').map((line, i) => <React.Fragment key={i}>{line}{i === 0 && <br />}</React.Fragment>)}</h2>
+            <p className="text-gray-400 mt-5 max-w-lg mx-auto text-lg font-light">{t('features_desc')}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { icon: FaBolt,      title: 'Instant Claims', desc: 'Automatic detection and verification. No forms to fill.',       bg: 'bg-red-50',    ic: 'text-red-600'    },
-              { icon: FaChartLine, title: 'AI Powered',     desc: 'ML models detect disruptions in real-time across your zone.',   bg: 'bg-orange-50', ic: 'text-orange-500' },
-              { icon: FaHeartbeat, title: 'Always On',      desc: 'Coverage active 24/7. We monitor so you can focus on work.',    bg: 'bg-rose-50',   ic: 'text-rose-500'   },
-              { icon: FaShieldAlt, title: 'Fraud Safe',     desc: 'Multi-layer AI fraud detection keeps the system fair for all.', bg: 'bg-red-50',    ic: 'text-red-700'    },
+              { icon: FaBolt,      title: t('feat_1_title'), desc: t('feat_1_desc'),       bg: 'bg-red-50',    ic: 'text-red-600'    },
+              { icon: FaChartLine, title: t('feat_2_title'), desc: t('feat_2_desc'),   bg: 'bg-orange-50', ic: 'text-orange-500' },
+              { icon: FaHeartbeat, title: t('feat_3_title'), desc: t('feat_3_desc'),    bg: 'bg-rose-50',   ic: 'text-rose-500'   },
+              { icon: FaShieldAlt, title: t('feat_4_title'), desc: t('feat_4_desc'), bg: 'bg-red-50',    ic: 'text-red-700'    },
             ].map((f, i) => (
               <div key={i} className="group bg-white border border-gray-100 rounded-3xl p-7 hover:border-red-200 hover:shadow-xl hover:shadow-red-50 hover:-translate-y-2 transition-all duration-300">
                 <div className={`w-13 h-13 w-12 h-12 ${f.bg} rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300`}>
@@ -144,8 +154,8 @@ const HomePage: React.FC = () => {
       <section className="py-28 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-20">
-            <p className="text-red-600 text-xs font-bold uppercase tracking-[0.2em] mb-3">Process</p>
-            <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">How it works</h2>
+            <p className="text-red-600 text-xs font-bold uppercase tracking-[0.2em] mb-3">{t('how_eyebrow')}</p>
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">{t('how_title')}</h2>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -155,21 +165,21 @@ const HomePage: React.FC = () => {
               {[
                 {
                   step: '01',
-                  title: 'Subscribe to a Plan',
-                  desc: 'Choose a daily, weekly or monthly coverage plan. Takes under 60 seconds to activate.',
-                  detail: 'Plans from ₹5/day',
+                  title: t('step_1_title'),
+                  desc: t('step_1_desc'),
+                  detail: t('step_1_detail'),
                 },
                 {
                   step: '02',
-                  title: 'Stay Protected 24/7',
-                  desc: 'We continuously monitor weather, traffic, AQI and platform status in your zone.',
-                  detail: 'Zero manual effort',
+                  title: t('step_2_title'),
+                  desc: t('step_2_desc'),
+                  detail: t('step_2_detail'),
                 },
                 {
                   step: '03',
-                  title: 'Get Paid Instantly',
-                  desc: 'Disruption confirmed? Your payout is triggered automatically — no claim needed.',
-                  detail: '₹450 transferred in minutes',
+                  title: t('step_3_title'),
+                  desc: t('step_3_desc'),
+                  detail: t('step_3_detail'),
                 },
               ].map((item, i) => (
                 <div key={i} className={`flex gap-5 p-6 rounded-2xl transition-all duration-300 ${i === 2 ? 'bg-red-600 text-white shadow-xl shadow-red-200' : 'bg-white border border-gray-100 hover:border-red-100 hover:shadow-md'}`}>
@@ -221,13 +231,13 @@ const HomePage: React.FC = () => {
             <div className="relative z-10">
               <FaHeartbeat className="text-red-300 text-4xl mx-auto mb-7" />
               <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-5 leading-tight">
-                Ready to get<br />protected?
+                {t('cta_title').split('\n').map((line, i) => <React.Fragment key={i}>{line}{i === 0 && <br />}</React.Fragment>)}
               </h2>
               <p className="text-red-200 mb-10 text-lg font-light max-w-sm mx-auto">
-                Join thousands of gig workers earning with confidence every day.
+                {t('cta_desc')}
               </p>
               <Link to="/worker" className="btn-white text-base px-10 py-4 rounded-2xl shadow-xl">
-                Start Today <FaArrowRight />
+                {t('cta_btn')} <FaArrowRight />
               </Link>
             </div>
           </div>

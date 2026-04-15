@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
@@ -7,6 +7,7 @@ import LoginPage from './pages/LoginPage'
 import WorkerPortal from './pages/WorkerPortal'
 import AdminDashboard from './pages/AdminDashboard'
 import ClaimsPage from './pages/ClaimsPage'
+import LanguagePickerModal from './components/LanguagePickerModal'
 import { useAuth } from './stores'
 import './App.css'
 
@@ -25,9 +26,12 @@ function ProtectedAdmin({ children }: { children: React.ReactNode }) {
 }
 
 function App() {
+  const [showLangPicker, setShowLangPicker] = useState(!localStorage.getItem('carely_lang'))
+
   return (
     <Router>
       <div className="flex flex-col min-h-screen">
+        {showLangPicker && <LanguagePickerModal onClose={() => setShowLangPicker(false)} />}
         <Navbar />
         <main className="flex-1">
           <Routes>

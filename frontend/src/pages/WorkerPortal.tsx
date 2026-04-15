@@ -8,6 +8,7 @@ import {
 import { useData, useAuth, loadWorkerData } from '../stores'
 import { apiClient } from '../api/client'
 import type { InsurancePlan, Subscription } from '../types'
+import { useTranslation } from 'react-i18next'
 
 const PLANS: InsurancePlan[] = [
   { id: 1, name: 'DAILY',   duration_days: 1,  premium_amount: 5,   payout_amount: 200, active: true },
@@ -15,11 +16,11 @@ const PLANS: InsurancePlan[] = [
   { id: 3, name: 'MONTHLY', duration_days: 30, premium_amount: 120, payout_amount: 2000, active: true },
 ]
 
-const TABS = [
-  { id: 'overview', label: 'Overview',  icon: FaChartLine  },
-  { id: 'plans',    label: 'Plans',     icon: FaShieldAlt  },
-  { id: 'claims',   label: 'Claims',    icon: FaClipboard  },
-  { id: 'payouts',  label: 'Payouts',   icon: FaRupeeSign  },
+const TABS_DEF = [
+  { id: 'overview', key: 'wp_tab_overview', icon: FaChartLine },
+  { id: 'plans',    key: 'wp_tab_plans',    icon: FaShieldAlt },
+  { id: 'claims',   key: 'wp_tab_claims',   icon: FaClipboard },
+  { id: 'payouts',  key: 'wp_tab_payouts',  icon: FaRupeeSign },
 ]
 
 /* ── Status badge ── */
@@ -44,6 +45,7 @@ const WorkerPortal: React.FC = () => {
   const { user: authUser } = useAuth()
   const user = authUser?.id ? { id: authUser.id, name: authUser.name, platform: authUser.platform, zone: authUser.zone } : MOCK_USER
   const { claims, loading } = useData()
+  const { t } = useTranslation()
   const [activeTab, setActiveTab]       = useState('overview')
   const [subscription, setSubscription] = useState<Subscription | null>(null)
   const [subscribing, setSubscribing]   = useState<number | null>(null)
@@ -92,14 +94,14 @@ const WorkerPortal: React.FC = () => {
               {/* status pill */}
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 border border-red-100 rounded-full mb-8">
                 <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                <span className="text-sm font-semibold text-gray-700">Active Gig Worker</span>
+                <span className="text-sm font-semibold text-gray-700">{t('wp_active')}</span>
               </div>
 
               <h1 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight leading-tight mb-3">
-                Hey, {user.name.split(' ')[0]} 👋
+                {t('wp_greeting')} {user.name.split(' ')[0]} 👋
               </h1>
               <p className="text-gray-400 text-lg font-light mb-8">
-                Your income is protected. Here's your coverage dashboard.
+                {t('wp_subtitle')}
               </p>
 
               {/* worker meta */}
@@ -115,7 +117,7 @@ const WorkerPortal: React.FC = () => {
                 <div className="flex items-center gap-2 px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl">
                   <FaShieldAlt className="text-red-500 text-sm" />
                   <span className="text-sm font-semibold text-gray-700">
-                    {subscription ? `Covered · ${daysLeft}d left` : 'Not Covered'}
+                    {subscription ? `${t('wp_covered')} · ${daysLeft}${t('wp_days_left')}` : t('wp_not_covered')}
                   </span>
                 </div>
               </div>
@@ -123,9 +125,9 @@ const WorkerPortal: React.FC = () => {
               {/* quick stats */}
               <div className="grid grid-cols-3 gap-4">
                 {[
-                  { label: 'Total Claims',   value: claims.length,                                    icon: FaClipboard  },
-                  { label: 'Paid Out',       value: `₹${claims.filter(c => c.status === 'PAID').reduce((a, c) => a + c.claim_amount, 0)}`, icon: FaRupeeSign },
-                  { label: 'Coverage Days',  value: subscription ? `${daysLeft}d` : '—',              icon: FaClock      },
+                  { label: t('wp_total_claims'), value: claims.length,                                    icon: FaClipboard },
+                  { label: t('wp_paid_out'),      value: `₹${claims.filter(c => c.status === 'PAID').reduce((a, c) => a + c.claim_amount, 0)}`, icon: FaRupeeSign },
+                  { label: t('wp_coverage_days'), value: subscription ? `${daysLeft}d` : '—',              icon: FaClock     },
                 ].map((s, i) => (
                   <div key={i} className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
                     <s.icon className="text-red-500 text-base mb-2" />
@@ -228,10 +230,10 @@ const WorkerPortal: React.FC = () => {
           <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 flex-wrap">
             <div className="flex items-center gap-3">
               <FaExclamationTriangle className="text-red-200 text-lg flex-shrink-0" />
-              <p className="text-white text-sm font-semibold">You have no active coverage. Subscribe to a plan to get protected instantly.</p>
+              <p className="text-white text-sm font-semibold">{t('wp_no_coverage_banner')}</p>
             </div>
             <button onClick={() => setActiveTab('plans')} className="btn-white text-sm px-5 py-2 rounded-xl flex-shrink-0">
-              View Plans <FaArrowRight />
+              {t('wp_view_plans')} <FaArrowRight />
             </button>
           </div>
         </div>
@@ -244,18 +246,18 @@ const WorkerPortal: React.FC = () => {
 
         {/* Tab bar */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-1.5 flex gap-1 mb-8">
-          {TABS.map(tab => (
+          {TABS_DEF.map(tabDef => (
             <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              key={tabDef.id}
+              onClick={() => setActiveTab(tabDef.id)}
               className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-200 ${
-                activeTab === tab.id
+                activeTab === tabDef.id
                   ? 'bg-red-600 text-white shadow-md shadow-red-200'
                   : 'text-gray-500 hover:text-red-600 hover:bg-red-50'
               }`}
             >
-              <tab.icon className="text-xs" />
-              <span className="hidden sm:inline">{tab.label}</span>
+              <tabDef.icon className="text-xs" />
+              <span className="hidden sm:inline">{t(tabDef.key)}</span>
             </button>
           ))}
         </div>
@@ -270,21 +272,21 @@ const WorkerPortal: React.FC = () => {
                 <div className="bg-gradient-to-r from-red-600 to-red-700 px-8 py-6">
                   <div className="flex items-center justify-between flex-wrap gap-4">
                     <div>
-                      <p className="text-red-200 text-sm font-medium mb-1">Active Coverage</p>
-                      <h2 className="text-3xl font-black text-white">Plan #{subscription.plan_id}</h2>
+                      <p className="text-red-200 text-sm font-medium mb-1">{t('wp_active_coverage')}</p>
+                      <h2 className="text-3xl font-black text-white">{t('wp_plan')}{subscription.plan_id}</h2>
                     </div>
                     <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full">
                       <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                      <span className="text-white text-sm font-semibold">ACTIVE</span>
+                      <span className="text-white text-sm font-semibold">{t('wp_active_badge')}</span>
                     </div>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-0 divide-x divide-gray-100">
                   {[
-                    { label: 'Premium Paid',  value: `₹${subscription.premium_paid}`,                              icon: FaRupeeSign    },
-                    { label: 'Valid Until',   value: new Date(subscription.expiry_date).toLocaleDateString('en-IN'), icon: FaCalendarAlt  },
-                    { label: 'Days Left',     value: `${daysLeft} days`,                                            icon: FaClock        },
-                    { label: 'Status',        value: subscription.status,                                           icon: FaCheckCircle  },
+                    { label: t('wp_premium_paid'),    value: `₹${subscription.premium_paid}`,                              icon: FaRupeeSign   },
+                    { label: t('wp_valid_until'),     value: new Date(subscription.expiry_date).toLocaleDateString('en-IN'), icon: FaCalendarAlt },
+                    { label: t('wp_days_left_label'), value: `${daysLeft} days`,                                            icon: FaClock       },
+                    { label: t('wp_status'),          value: subscription.status,                                           icon: FaCheckCircle },
                   ].map((item, i) => (
                     <div key={i} className="p-6">
                       <item.icon className="text-red-400 text-base mb-2" />
@@ -299,10 +301,10 @@ const WorkerPortal: React.FC = () => {
                 <div className="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <FaShieldAlt className="text-red-400 text-2xl" />
                 </div>
-                <h3 className="text-xl font-black text-gray-900 mb-2">No Active Coverage</h3>
-                <p className="text-gray-400 text-sm mb-6 max-w-xs mx-auto">Subscribe to a plan to start getting protected against income disruptions.</p>
+                <h3 className="text-xl font-black text-gray-900 mb-2">{t('wp_no_coverage_title')}</h3>
+                <p className="text-gray-400 text-sm mb-6 max-w-xs mx-auto">{t('wp_no_coverage_desc')}</p>
                 <button onClick={() => setActiveTab('plans')} className="btn-primary px-8 py-3 rounded-2xl">
-                  Browse Plans <FaArrowRight />
+                  {t('wp_browse_plans')} <FaArrowRight />
                 </button>
               </div>
             )}
@@ -310,9 +312,9 @@ const WorkerPortal: React.FC = () => {
             {/* Recent claims */}
             <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-black text-gray-900">Recent Claims</h3>
+                <h3 className="text-lg font-black text-gray-900">{t('wp_recent_claims')}</h3>
                 <button onClick={() => setActiveTab('claims')} className="text-red-600 text-sm font-semibold hover:underline flex items-center gap-1">
-                  View all <FaArrowRight className="text-xs" />
+                  {t('wp_view_all')} <FaArrowRight className="text-xs" />
                 </button>
               </div>
               {claims.length > 0 ? (
@@ -335,7 +337,7 @@ const WorkerPortal: React.FC = () => {
               ) : (
                 <div className="text-center py-10">
                   <FaClipboard className="text-gray-200 text-4xl mx-auto mb-3" />
-                  <p className="text-gray-400 text-sm">No claims yet</p>
+                  <p className="text-gray-400 text-sm">{t('wp_no_claims')}</p>
                 </div>
               )}
             </div>
@@ -346,8 +348,8 @@ const WorkerPortal: React.FC = () => {
         {activeTab === 'plans' && (
           <div className="animate-fade-in">
             <div className="mb-8">
-              <h2 className="text-3xl font-black text-gray-900 tracking-tight">Choose Your Plan</h2>
-              <p className="text-gray-400 mt-2">Flexible coverage that fits your work schedule and budget.</p>
+              <h2 className="text-3xl font-black text-gray-900 tracking-tight">{t('wp_choose_plan')}</h2>
+              <p className="text-gray-400 mt-2">{t('wp_plan_desc')}</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -371,7 +373,7 @@ const WorkerPortal: React.FC = () => {
                     {popular && (
                       <div className="absolute top-0 inset-x-0 flex justify-center">
                         <div className="bg-white text-red-600 text-xs font-black px-5 py-1.5 rounded-b-xl shadow-sm">
-                          MOST POPULAR
+                          {t('wp_most_popular')}
                         </div>
                       </div>
                     )}
@@ -415,7 +417,7 @@ const WorkerPortal: React.FC = () => {
                         {subscribing === plan.id ? (
                           <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
                         ) : (
-                          <>Subscribe Now <FaArrowRight className="text-xs" /></>
+                          <>{t('wp_subscribe')} <FaArrowRight className="text-xs" /></>
                         )}
                       </button>
                     </div>
@@ -427,10 +429,10 @@ const WorkerPortal: React.FC = () => {
             {/* guarantee strip */}
             <div className="mt-8 bg-white rounded-2xl border border-gray-100 p-6 flex flex-wrap items-center justify-center gap-8">
               {[
-                { icon: FaBolt,      text: 'Instant activation'    },
-                { icon: FaShieldAlt, text: 'No hidden charges'     },
-                { icon: FaClock,     text: 'Cancel anytime'        },
-                { icon: FaCheckCircle, text: 'Auto-claim on trigger' },
+                { icon: FaBolt,        text: t('wp_instant_activation') },
+                { icon: FaShieldAlt,   text: t('wp_no_hidden')          },
+                { icon: FaClock,       text: t('wp_cancel')             },
+                { icon: FaCheckCircle, text: t('wp_auto_claim')         },
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-2 text-gray-500 text-sm font-medium">
                   <item.icon className="text-red-500" />
@@ -446,8 +448,8 @@ const WorkerPortal: React.FC = () => {
           <div className="animate-fade-in">
             <div className="mb-8 flex items-center justify-between flex-wrap gap-4">
               <div>
-                <h2 className="text-3xl font-black text-gray-900 tracking-tight">Your Claims</h2>
-                <p className="text-gray-400 mt-1">{claims.length} total claims on record</p>
+                <h2 className="text-3xl font-black text-gray-900 tracking-tight">{t('wp_your_claims')}</h2>
+                <p className="text-gray-400 mt-1">{claims.length} {t('wp_total_on_record')}</p>
               </div>
               <div className="flex gap-3">
                 {['ALL', 'PAID', 'PENDING', 'REJECTED'].map(s => (
@@ -508,15 +510,15 @@ const WorkerPortal: React.FC = () => {
         {activeTab === 'payouts' && (
           <div className="animate-fade-in">
             <div className="mb-8">
-              <h2 className="text-3xl font-black text-gray-900 tracking-tight">Payment History</h2>
-              <p className="text-gray-400 mt-1">All approved claim payouts transferred to your account.</p>
+              <h2 className="text-3xl font-black text-gray-900 tracking-tight">{t('wp_payment_history')}</h2>
+              <p className="text-gray-400 mt-1">{t('wp_payout_desc')}</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
               {[
-                { label: 'Total Received', value: `₹${claims.filter(c => c.status === 'PAID').reduce((a, c) => a + c.claim_amount, 0)}`, icon: FaRupeeSign,   color: 'text-green-600', bg: 'bg-green-50' },
-                { label: 'Paid Claims',    value: claims.filter(c => c.status === 'PAID').length,                                         icon: FaCheckCircle, color: 'text-blue-600',  bg: 'bg-blue-50'  },
-                { label: 'Avg Payout',     value: '₹450',                                                                                  icon: FaChartLine,   color: 'text-red-600',   bg: 'bg-red-50'   },
+                { label: t('wp_total_received'), value: `₹${claims.filter(c => c.status === 'PAID').reduce((a, c) => a + c.claim_amount, 0)}`, icon: FaRupeeSign,   color: 'text-green-600', bg: 'bg-green-50' },
+                { label: t('wp_paid_claims'),    value: claims.filter(c => c.status === 'PAID').length,                                         icon: FaCheckCircle, color: 'text-blue-600',  bg: 'bg-blue-50'  },
+                { label: t('wp_avg_payout'),     value: '₹450',                                                                                  icon: FaChartLine,   color: 'text-red-600',   bg: 'bg-red-50'   },
               ].map((s, i) => (
                 <div key={i} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex items-center gap-4">
                   <div className={`w-12 h-12 ${s.bg} rounded-2xl flex items-center justify-center`}>
@@ -532,8 +534,8 @@ const WorkerPortal: React.FC = () => {
 
             <div className="bg-white rounded-3xl border border-gray-100 p-16 text-center">
               <FaCalendarAlt className="text-gray-200 text-5xl mx-auto mb-4" />
-              <h3 className="text-lg font-black text-gray-900 mb-2">Payout History</h3>
-              <p className="text-gray-400 text-sm max-w-xs mx-auto">Detailed payout records will appear here once claims are approved and transferred.</p>
+              <h3 className="text-lg font-black text-gray-900 mb-2">{t('wp_payout_history')}</h3>
+              <p className="text-gray-400 text-sm max-w-xs mx-auto">{t('wp_payout_history_desc')}</p>
             </div>
           </div>
         )}
