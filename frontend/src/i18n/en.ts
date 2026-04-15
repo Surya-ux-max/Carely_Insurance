@@ -132,6 +132,23 @@ const en = {
   wp_payout_history: 'Payout History',
   wp_payout_history_desc: 'Detailed payout records will appear here once claims are approved and transferred.',
 
+  // HomePage extras
+  social_proof: '100K+ workers protected',
+  stats_avg_payout: 'Avg Payout',
+  stats_zones: 'Zones Live',
+  stats_fraud: 'Fraud Blocked',
+  pricing_eyebrow: 'Pricing',
+  pricing_title: 'Plans that fit every gig',
+  pricing_sub: 'Starting from just ₹5 a day. Cancel anytime.',
+  pricing_payout_label: 'Up to',
+  pricing_payout_suffix: 'payout',
+  pricing_get_started: 'Get Started',
+  trust_instant: 'Instant activation',
+  trust_no_hidden: 'No hidden charges',
+  trust_ai: 'AI-powered protection',
+  trust_workers: '100K+ workers trust us',
+  cta_badge: 'Start in 60 seconds',
+
   // Language picker
   lang_title: 'Choose Your Language',
   lang_subtitle: 'Select your preferred language to continue',

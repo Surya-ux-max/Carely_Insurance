@@ -119,7 +119,7 @@ const HomePage: React.FC = () => {
                   <div className="flex items-center gap-0.5 mb-0.5">
                     {[...Array(5)].map((_,i) => <FaStar key={i} className="text-yellow-400 text-[10px]" />)}
                   </div>
-                  <p className="text-gray-600 text-xs font-semibold">100K+ workers protected</p>
+                  <p className="text-gray-600 text-xs font-semibold">{t('social_proof')}</p>
                 </div>
               </div>
             </div>
@@ -165,12 +165,12 @@ const HomePage: React.FC = () => {
           {[...Array(2)].map((_, ri) => (
             <div key={ri} className="flex items-center flex-shrink-0">
               {[
-                { label: t('stats_workers'), value: '100K+' },
-                { label: t('stats_claims'),  value: '₹5Cr+' },
-                { label: t('stats_uptime'),  value: '99.9%' },
-                { label: 'Avg Payout',       value: '2.4 min' },
-                { label: 'Zones Live',       value: '24' },
-                { label: 'Fraud Blocked',    value: '2.1%' },
+                { label: t('stats_workers'),    value: '100K+'   },
+                { label: t('stats_claims'),     value: '₹5Cr+'   },
+                { label: t('stats_uptime'),     value: '99.9%'   },
+                { label: t('stats_avg_payout'), value: '2.4 min' },
+                { label: t('stats_zones'),      value: '24'      },
+                { label: t('stats_fraud'),      value: '2.1%'    },
               ].map((s, i) => (
                 <div key={i} className="flex items-center gap-8 px-10 border-r border-red-500">
                   <div className="text-center">
@@ -284,11 +284,11 @@ const HomePage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
           <Reveal className="text-center mb-16">
-            <p className="text-red-600 text-xs font-bold uppercase tracking-[0.2em] mb-3">Pricing</p>
+            <p className="text-red-600 text-xs font-bold uppercase tracking-[0.2em] mb-3">{t('pricing_eyebrow')}</p>
             <h2 className="text-3xl md:text-5xl font-black text-gray-900 tracking-tight">
-              Plans that fit <span className="text-red-600">every gig</span>
+              {t('pricing_title').split(' ').slice(0,-2).join(' ')} <span className="text-red-600">{t('pricing_title').split(' ').slice(-2).join(' ')}</span>
             </h2>
-            <p className="text-gray-400 mt-4 text-base font-light">Starting from just ₹5 a day. Cancel anytime.</p>
+            <p className="text-gray-400 mt-4 text-base font-light">{t('pricing_sub')}</p>
           </Reveal>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
@@ -306,8 +306,8 @@ const HomePage: React.FC = () => {
                   {plan.popular && (
                     <div className="absolute top-0 inset-x-0 flex justify-center">
                       <div className="bg-white text-red-600 text-xs font-black px-5 py-1.5 rounded-b-xl shadow-sm">
-                        MOST POPULAR
-                      </div>
+                          {t('wp_most_popular')}
+                        </div>
                     </div>
                   )}
                   <div className="p-8 pt-10 flex flex-col h-full">
@@ -317,7 +317,7 @@ const HomePage: React.FC = () => {
                       <span className={`text-sm mb-2 ${plan.popular ? 'text-red-200' : 'text-gray-400'}`}>{plan.period}</span>
                     </div>
                     <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold mb-8 ${plan.popular ? 'bg-white/20 text-white' : 'bg-red-50 text-red-600'}`}>
-                      <FaRupeeSign className="text-[10px]" /> Up to {plan.payout} payout
+                      <FaRupeeSign className="text-[10px]" /> {t('pricing_payout_label')} {plan.payout} {t('pricing_payout_suffix')}
                     </div>
                     <div className="mt-auto">
                       <Link to="/worker"
@@ -326,7 +326,7 @@ const HomePage: React.FC = () => {
                             ? 'bg-white text-red-600 hover:bg-red-50 shadow-lg'
                             : 'bg-red-600 text-white hover:bg-red-700 shadow-md shadow-red-100'
                         }`}>
-                        Get Started <FaArrowRight className="text-xs" />
+                        {t('pricing_get_started')} <FaArrowRight className="text-xs" />
                       </Link>
                     </div>
                   </div>
@@ -345,10 +345,10 @@ const HomePage: React.FC = () => {
           <div className="max-w-5xl mx-auto px-6 lg:px-8">
             <div className="flex flex-wrap items-center justify-center gap-10">
               {[
-                { icon: FaBolt,      text: 'Instant activation'     },
-                { icon: FaShieldAlt, text: 'No hidden charges'      },
-                { icon: FaHeartbeat, text: 'AI-powered protection'  },
-                { icon: FaUsers,     text: '100K+ workers trust us' },
+                { icon: FaBolt,      text: t('trust_instant')   },
+                { icon: FaShieldAlt, text: t('trust_no_hidden') },
+                { icon: FaHeartbeat, text: t('trust_ai')        },
+                { icon: FaUsers,     text: t('trust_workers')   },
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-2.5 text-gray-500 text-sm font-medium">
                   <div className="w-8 h-8 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -382,7 +382,7 @@ const HomePage: React.FC = () => {
               <div className="relative z-10">
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/15 border border-white/25 rounded-full mb-8">
                   <FaPlay className="text-white text-[10px]" />
-                  <span className="text-white text-xs font-bold tracking-widest uppercase">Start in 60 seconds</span>
+                  <span className="text-white text-xs font-bold tracking-widest uppercase">{t('cta_badge')}</span>
                 </div>
 
                 <h2 className="font-black text-white tracking-tight mb-5 leading-tight"

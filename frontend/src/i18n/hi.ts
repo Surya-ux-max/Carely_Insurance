@@ -132,6 +132,23 @@ const hi = {
   wp_payout_history: 'भुगतान इतिहास',
   wp_payout_history_desc: 'दावे स्वीकृत और ट्रांसफर होने के बाद विस्तृत भुगतान रिकॉर्ड यहाँ दिखेंगे।',
 
+  // HomePage extras
+  social_proof: '1 लाख+ वर्कर्स सुरक्षित',
+  stats_avg_payout: 'औसत भुगतान',
+  stats_zones: 'लाइव क्षेत्र',
+  stats_fraud: 'धोखाधड़ी रोकी गई',
+  pricing_eyebrow: 'मूल्य निर्धारण',
+  pricing_title: 'हर गिग के लिए प्लान',
+  pricing_sub: 'सिर्फ ₹5/दिन से शुरू। कभी भी रद्द करें।',
+  pricing_payout_label: 'तक',
+  pricing_payout_suffix: 'भुगतान',
+  pricing_get_started: 'शुरू करें',
+  trust_instant: 'तुरंत सक्रियण',
+  trust_no_hidden: 'कोई छुपे शुल्क नहीं',
+  trust_ai: 'AI-संचालित सुरक्षा',
+  trust_workers: '1 लाख+ वर्कर्स का भरोसा',
+  cta_badge: '60 सेकंड में शुरू करें',
+
   // Language picker
   lang_title: 'अपनी भाषा चुनें',
   lang_subtitle: 'जारी रखने के लिए अपनी पसंदीदा भाषा चुनें',

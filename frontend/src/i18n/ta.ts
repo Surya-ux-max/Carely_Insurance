@@ -132,6 +132,23 @@ const ta = {
   wp_payout_history: 'கட்டண வரலாறு',
   wp_payout_history_desc: 'கோரிக்கைகள் அனுமதிக்கப்பட்டு மாற்றப்பட்டதும் விரிவான கட்டண பதிவுகள் இங்கே தோன்றும்.',
 
+  // HomePage extras
+  social_proof: '1 லட்சம்+ தொழிலாளர்கள் பாதுகாக்கப்பட்டனர்',
+  stats_avg_payout: 'சராசரி கட்டணம்',
+  stats_zones: 'நேரடி மண்டலங்கள்',
+  stats_fraud: 'மோசடி தடுக்கப்பட்டது',
+  pricing_eyebrow: 'விலை நிர்ணயம்',
+  pricing_title: 'ஒவ்வொரு கிக்கிற்கும் ஏற்ற திட்டங்கள்',
+  pricing_sub: 'வெறும் ₹5/நாளிலிருந்து தொடங்குகிறது. எப்போதும் ரத்து செய்யலாம்.',
+  pricing_payout_label: 'வரை',
+  pricing_payout_suffix: 'கட்டணம்',
+  pricing_get_started: 'தொடங்குங்கள்',
+  trust_instant: 'உடனடி செயல்படுத்தல்',
+  trust_no_hidden: 'மறைமுக கட்டணங்கள் இல்லை',
+  trust_ai: 'AI-இயக்கப்பட்ட பாதுகாப்பு',
+  trust_workers: '1 லட்சம்+ தொழிலாளர்கள் நம்புகிறார்கள்',
+  cta_badge: '60 வினாடிகளில் தொடங்குங்கள்',
+
   // Language picker
   lang_title: 'உங்கள் மொழியை தேர்வு செய்யுங்கள்',
   lang_subtitle: 'தொடர உங்கள் விருப்பமான மொழியை தேர்ந்தெடுக்கவும்',
